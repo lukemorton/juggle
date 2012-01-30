@@ -1,0 +1,159 @@
+ <!doctype html>
+<html>
+	<head>
+		<link rel="stylesheet" href="http://code.jquery.com/qunit/git/qunit.css" />
+	</head>
+	<body>
+		<h1 id="qunit-header">QUnit example</h1>
+		<h2 id="qunit-banner"></h2>
+		<div id="qunit-testrunner-toolbar"></div>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
+		<div id="qunit-fixture">test markup, will be hidden</div>
+
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+		<script src="http://code.jquery.com/qunit/git/qunit.js"></script>
+		<script src="../lib/juggle.js"></script>
+		<script>
+			test("Juggle exists", function () {
+				ok(typeof(Juggle) === 'function',
+					'Jugled is defined globally');
+			});
+			
+			test('.noConflict() unsets Class from window', function() {
+				var original = Juggle,
+					J = Juggle.noConflict();
+
+				equals(typeof(Juggle), 'undefined',
+					'.noConflict() unsets Class from window');
+
+				same(J, original,
+					'the returned Class is the same as the original');
+
+				// cleanup
+				window.Juggle = original;
+			});
+
+			asyncTest("single Juggle task", function () {
+				(new Juggle)
+					.add(function (complete) {
+						setTimeout(function () {
+							complete('A1');
+						}, 500);	
+					})
+					.complete(function (success, responses) {
+						ok(success, "success is true");
+						ok(responses[0] === 'A1', "responses as expected");
+						start();
+					});
+			});
+
+			asyncTest("double Juggle task", function () {
+				(new Juggle)
+					.add(function (complete) {
+						setTimeout(function () {
+							complete('B1');
+						}, 1000);	
+					})
+					.add(function (complete) {
+						setTimeout(function () {
+							complete('B2');
+						}, 500);	
+					})
+					.complete(function (success, responses) {
+						ok(success,
+							"success is true");
+						deepEqual(responses, ['B1', 'B2'],
+							"responses as expected");
+						start();
+					});
+			});
+
+			asyncTest(".timeout()", function () {
+				(new Juggle)
+					.add(function (complete) {
+						setTimeout(function () {
+							complete(true);
+						}, 2000);
+					})
+					.timeout(1000, function () {
+						expect(2);
+						start();
+					})
+					.complete(function (success, responses) {
+						ok(success === false,
+							'success === false');
+						deepEqual(responses, [],
+							'empty response');
+					});
+			});
+
+			asyncTest(".cancel() callback", function () {
+				(new Juggle)
+					.add(function (complete) {
+						var timer = setTimeout(function () {
+							complete(true);
+						}, 2500);
+
+						return function (stopped) {
+							clearTimeout(timer);
+							stopped();
+						};
+					})
+					.add(function (complete) {
+						var _this = this;
+						setTimeout(function () {
+							complete('We cancelled')
+							_this.cancel(function () {
+								expect(3);
+								start();
+							});
+						}, 1000);
+					})
+					.complete(function (success, responses) {
+						ok(this.cancelled,
+							'was cancelled');
+						ok(success === false,
+							'success === false');
+						deepEqual(responses, [undefined, 'We cancelled'],
+							'response as expected');
+					});
+			});
+
+			asyncTest(".cancel() timedout", function () {
+				(new Juggle)
+					.add(function (complete) {
+						var timer = setTimeout(function () {
+							complete(true);
+						}, 2500);
+
+						return function (stopped) {
+							setTimeout(function () {
+								clearTimeout(timer);
+								stopped();
+							}, 2000);
+						};
+					})
+					.add(function (complete) {
+						var _this = this;
+						setTimeout(function () {
+							complete('We cancelled')
+							_this.cancel(1000, function () {
+								expect(3);
+								start();
+							});
+						}, 1000);
+					})
+					.complete(function (success, responses) {
+						ok(this.cancelled,
+							'was cancelled');
+						ok(success === false,
+							'success === false');
+						deepEqual(responses, [undefined, 'We cancelled'],
+							'response as expected');
+					});
+			});
+
+		</script>
+	</body>
+</html>
