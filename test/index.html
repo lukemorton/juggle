@@ -20,15 +20,15 @@
 					'Jugled is defined globally');
 			});
 			
-			test('.noConflict() unsets Class from window', function() {
+			test('.noConflict() unsets Juggle from window', function() {
 				var original = Juggle,
 					J = Juggle.noConflict();
 
 				equals(typeof(Juggle), 'undefined',
-					'.noConflict() unsets Class from window');
+					'.noConflict() unsets Juggle from window');
 
 				same(J, original,
-					'the returned Class is the same as the original');
+					'the returned Juggle is the same as the original');
 
 				// cleanup
 				window.Juggle = original;
