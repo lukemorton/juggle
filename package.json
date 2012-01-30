@@ -2,7 +2,7 @@
   "author": "Luke Morton <lukemorton.designs@gmail.com> (http://lukemorton.co.uk)",
   "name": "juggle",
   "description": "Asynchronous result handling.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/DrPheltRight/juggle",
   "repository": {
     "type": "git",
