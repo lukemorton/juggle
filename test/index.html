@@ -48,6 +48,19 @@
 					});
 			});
 
+			asyncTest("single Juggle failed task", function () {
+				(new Juggle)
+					.add(function (complete) {
+						setTimeout(function () {
+							complete(false);
+						}, 500);
+					})
+					.fail(function (responses) {
+						ok(true, "fail called");
+						start();
+					});
+			});
+
 			asyncTest("double Juggle task", function () {
 				(new Juggle)
 					.add(function (complete) {
