@@ -39,7 +39,7 @@
 					.add(function (complete) {
 						setTimeout(function () {
 							complete('A1');
-						}, 500);
+						}, 10);
 					})
 					.complete(function (success, responses) {
 						ok(success, "success is true");
@@ -53,7 +53,7 @@
 					.add(function (complete) {
 						setTimeout(function () {
 							complete(false);
-						}, 500);
+						}, 10);
 					})
 					.fail(function (responses) {
 						ok(true, "fail called");
@@ -66,12 +66,12 @@
 					.add(function (complete) {
 						setTimeout(function () {
 							complete('B1');
-						}, 1000);	
+						}, 20);	
 					})
 					.add(function (complete) {
 						setTimeout(function () {
 							complete('B2');
-						}, 500);	
+						}, 10);	
 					})
 					.complete(function (success, responses) {
 						ok(success,
@@ -87,9 +87,9 @@
 					.add(function (complete) {
 						setTimeout(function () {
 							complete(true);
-						}, 2000);
+						}, 20);
 					})
-					.timeout(1000, function () {
+					.timeout(10, function () {
 						expect(2);
 						start();
 					})
@@ -106,7 +106,7 @@
 					.add(function (complete) {
 						var timer = setTimeout(function () {
 							complete(true);
-						}, 2500);
+						}, 20);
 
 						return function (stopped) {
 							clearTimeout(timer);
@@ -121,7 +121,7 @@
 								expect(3);
 								start();
 							});
-						}, 1000);
+						}, 10);
 					})
 					.complete(function (success, responses) {
 						ok(this.cancelled,
@@ -138,24 +138,24 @@
 					.add(function (complete) {
 						var timer = setTimeout(function () {
 							complete(true);
-						}, 2500);
+						}, 30);
 
 						return function (stopped) {
 							setTimeout(function () {
 								clearTimeout(timer);
 								stopped();
-							}, 2000);
+							}, 20);
 						};
 					})
 					.add(function (complete) {
 						var _this = this;
 						setTimeout(function () {
 							complete('We cancelled')
-							_this.cancel(1000, function () {
+							_this.cancel(10, function () {
 								expect(3);
 								start();
 							});
-						}, 1000);
+						}, 10);
 					})
 					.complete(function (success, responses) {
 						ok(this.cancelled,
