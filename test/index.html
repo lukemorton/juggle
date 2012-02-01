@@ -34,6 +34,8 @@
 			});
 
 			asyncTest("single Juggle task", function () {
+				expect(2);
+
 				(new Juggle)
 					.do(function (complete) {
 						setTimeout(function () {
@@ -48,6 +50,8 @@
 			});
 
 			asyncTest("single Juggle failed task", function () {
+				expect(1);
+
 				(new Juggle)
 					.do(function (complete) {
 						setTimeout(function () {
@@ -82,6 +86,8 @@
 			});
 
 			asyncTest(".timeout()", function () {
+				expect(2);
+				
 				(new Juggle)
 					.do(function (complete) {
 						setTimeout(function () {
@@ -89,7 +95,6 @@
 						}, 20);
 					})
 					.timeout(10, function () {
-						expect(2);
 						start();
 					})
 					.complete(function (success, responses) {
@@ -101,6 +106,8 @@
 			});
 
 			asyncTest(".cancel() callback", function () {
+				expect(3);
+
 				(new Juggle)
 					.do(function (complete) {
 						var timer = setTimeout(function () {
@@ -117,7 +124,6 @@
 						setTimeout(function () {
 							complete('We cancelled')
 							_this.cancel(function () {
-								expect(3);
 								start();
 							});
 						}, 10);
@@ -133,6 +139,8 @@
 			});
 
 			asyncTest(".cancel() timedout", function () {
+				expect(3);
+
 				(new Juggle)
 					.do(function (complete) {
 						var timer = setTimeout(function () {
@@ -151,7 +159,6 @@
 						setTimeout(function () {
 							complete('We cancelled')
 							_this.cancel(10, function () {
-								expect(3);
 								start();
 							});
 						}, 10);
