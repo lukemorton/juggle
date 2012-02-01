@@ -42,8 +42,9 @@
 							complete('A1');
 						}, 10);
 					})
-					.complete(function (success, responses) {
-						ok(success, "success is true");
+					.complete(function (err, responses) {
+						ok(err == null,
+							"err like null");
 						ok(responses[0] === 'A1', "responses as expected");
 						start();
 					});
@@ -76,9 +77,9 @@
 							complete('B2');
 						}, 10);	
 					})
-					.complete(function (success, responses) {
-						ok(success,
-							"success is true");
+					.complete(function (err, responses) {
+						ok(err == null,
+							"err like null");
 						deepEqual(responses, ['B1', 'B2'],
 							"responses as expected");
 						start();
@@ -97,9 +98,9 @@
 					.timeout(10, function () {
 						start();
 					})
-					.complete(function (success, responses) {
-						ok(success === false,
-							'success === false');
+					.complete(function (err, responses) {
+						ok(err === 'Timed out',
+							"Timeout error message");
 						deepEqual(responses, [],
 							'empty response');
 					});
@@ -128,11 +129,11 @@
 							});
 						}, 10);
 					})
-					.complete(function (success, responses) {
+					.complete(function (err, responses) {
 						ok(this.cancelled,
 							'was cancelled');
-						ok(success === false,
-							'success === false');
+						ok(err === 'Cancelled',
+							'Cancelled error message');
 						deepEqual(responses, [undefined, 'We cancelled'],
 							'response as expected');
 					});
@@ -163,11 +164,11 @@
 							});
 						}, 10);
 					})
-					.complete(function (success, responses) {
+					.complete(function (err, responses) {
 						ok(this.cancelled,
 							'was cancelled');
-						ok(success === false,
-							'success === false');
+						ok(err === 'Cancelled',
+							'Cancelled error message');
 						deepEqual(responses, [undefined, 'We cancelled'],
 							'response as expected');
 					});
