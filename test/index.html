@@ -173,6 +173,33 @@
 					});
 			});
 
+			asyncTest("Juggle is immutable", function () {
+				expect(1);
+
+				(new Juggle)
+					.do(function (complete) {
+						setTimeout(function () {
+							complete(true);
+						}, 50);
+					})
+					.complete(function () {
+						try
+						{
+							this.do(function (complete) {
+								complete(true);
+							});
+						} catch (e) {
+							if (e.indexOf('immutable') > -1) {
+								ok(true,
+									'Immutable exception thrown');
+							} else {
+								throw e;
+							}
+						}
+						
+						start();
+					});
+			});
 		</script>
 	</body>
 </html>
