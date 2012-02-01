@@ -94,7 +94,6 @@ functions will be called. Here is the same example as above
 but utilising a cancel function.
 
 ``` javascript
-
 (new Juggle)
   .do(function (complete) {
     var t = setTimeout(function () {
@@ -109,6 +108,38 @@ but utilising a cancel function.
     throw 'Timed out mofo';
   });
 ```
+
+### Using Juggle to load JS in parallel
+
+``` javascript
+function asyncJS(src, callback) {
+  return function (complete) {
+    var firstScript = s = document.getElementsByTagName('script')[0],
+      newScript = document.createElement('script');
+    
+    newScript.type = 'text/javascript';
+    newScript.async = true;
+    newScript.src = src;
+    newScript.onload = function () {
+      complete(true);
+    };
+
+    firstScript.parentNode.insertBefore(newScript, firstScript);
+  };
+}
+
+(new Juggle)
+  .do(asyncJS('https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'))
+  .do(asyncJS('https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js'))
+  .success(function () {
+    // Do something with jQuery and UI
+    $('body').append('<h1>Loaded</h1>');
+  })
+  .fail(function () {
+    alert('Could not load libraries from Google.');
+  });
+```
+
 
 ## Similar projects
 
