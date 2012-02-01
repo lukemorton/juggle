@@ -66,6 +66,8 @@
 			});
 
 			asyncTest("double Juggle task", function () {
+				expect(2);
+
 				(new Juggle)
 					.do(function (complete) {
 						setTimeout(function () {
