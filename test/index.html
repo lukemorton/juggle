@@ -91,9 +91,14 @@
 				
 				(new Juggle)
 					.do(function (complete) {
-						setTimeout(function () {
+						var t = setTimeout(function () {
 							complete(true);
 						}, 20);
+
+						return function (stopped) {
+							clearTimeout(t);
+							stopped();
+						};
 					})
 					.timeout(10, function () {
 						start();
@@ -111,12 +116,12 @@
 
 				(new Juggle)
 					.do(function (complete) {
-						var timer = setTimeout(function () {
+						var t = setTimeout(function () {
 							complete(true);
 						}, 20);
 
 						return function (stopped) {
-							clearTimeout(timer);
+							clearTimeout(t);
 							stopped();
 						};
 					})
@@ -144,21 +149,21 @@
 
 				(new Juggle)
 					.do(function (complete) {
-						var timer = setTimeout(function () {
+						var t = setTimeout(function () {
 							complete(true);
-						}, 30);
+						}, 50);
 
 						return function (stopped) {
 							setTimeout(function () {
-								clearTimeout(timer);
+								clearTimeout(t);
 								stopped();
-							}, 20);
+							}, 30);
 						};
 					})
 					.do(function (complete) {
 						var _this = this;
 						setTimeout(function () {
-							complete('We cancelled')
+							complete('We cancelled');
 							_this.cancel(10, function () {
 								start();
 							});
