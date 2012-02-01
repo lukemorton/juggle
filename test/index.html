@@ -88,6 +88,30 @@
 					});
 			});
 
+			asyncTest(".success()", function () {
+				expect(1);
+
+				(new Juggle)
+					.do(function (complete) { complete(true); })
+					.success(function () {
+						ok(true,
+							'.success() was called');
+						start();
+					});
+			})
+
+			asyncTest(".fail()", function () {
+				expect(1);
+
+				(new Juggle)
+					.do(function (complete) { complete(false); })
+					.fail(function () {
+						ok(true,
+							'.fail() was called');
+						start();
+					});
+			})
+
 			asyncTest(".timeout()", function () {
 				expect(2);
 				
