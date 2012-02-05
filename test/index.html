@@ -205,8 +205,8 @@
 					});
 			});
 
-			asyncTest("Juggle is immutable", function () {
-				expect(1);
+			asyncTest("Juggle is immutable after first callback", function () {
+				expect(3);
 
 				(new Juggle)
 					.j(function (complete) {
@@ -228,9 +228,78 @@
 								throw e;
 							}
 						}
+
+						this.complete(function (err, responses) {
+							ok(true,
+								'New callbacks should be run immediately');
+							ok(err == null,
+								'No errors');
+						});
 						
 						start();
 					});
+			});
+
+			test('Juggle can return result synchronously', function () {
+				expect(5);
+
+				var juggle = new Juggle
+
+				juggle
+					.j(function (complete) {
+						complete(true);
+					})
+					.j(function (complete) {
+						complete(true);
+					})
+					.complete(function (err, response) {
+						ok(err == null,
+							'No errors');
+						deepEqual(response, [true, true],
+							'Expected result');
+					});
+
+				try {
+					juggle.j(function (complete) {
+						complete(true);
+					});
+				} catch (e) {
+					ok(true,
+						'Exception expected, you cannot add a '+
+						'task to a completed juggle.');
+				}
+
+				// We can still add callbacks though
+				juggle.complete(function (err, response) {
+					ok(err == null,
+						'No errors');
+					deepEqual(response, [true, true],
+						'Expected result');
+				});
+			});
+
+			test('Synchronous but callback defined first', function () {
+				expect(3);
+
+				var juggle = new Juggle;
+
+				juggle.complete(function () {
+					ok(true,
+						'Complete does not run');
+				});
+
+				juggle.j(function (complete) {
+					complete(true);
+					ok(true,
+						'You can add one after a callback');
+				})
+
+				try {
+					juggle.j(function () {});
+				} catch (e) {
+					ok(true,
+						'But not two');
+				}
 			});
 		</script>
 	</body>
