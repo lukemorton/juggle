@@ -37,7 +37,7 @@
 				expect(2);
 
 				(new Juggle)
-					.do(function (complete) {
+					.j(function (complete) {
 						setTimeout(function () {
 							complete('A1');
 						}, 10);
@@ -54,7 +54,7 @@
 				expect(1);
 
 				(new Juggle)
-					.do(function (complete) {
+					.j(function (complete) {
 						setTimeout(function () {
 							complete(false);
 						}, 10);
@@ -69,12 +69,12 @@
 				expect(2);
 
 				(new Juggle)
-					.do(function (complete) {
+					.j(function (complete) {
 						setTimeout(function () {
 							complete('B1');
 						}, 20);	
 					})
-					.do(function (complete) {
+					.j(function (complete) {
 						setTimeout(function () {
 							complete('B2');
 						}, 10);	
@@ -92,7 +92,7 @@
 				expect(1);
 
 				(new Juggle)
-					.do(function (complete) { complete(true); })
+					.j(function (complete) { complete(true); })
 					.success(function () {
 						ok(true,
 							'.success() was called');
@@ -104,7 +104,7 @@
 				expect(1);
 
 				(new Juggle)
-					.do(function (complete) { complete(false); })
+					.j(function (complete) { complete(false); })
 					.fail(function () {
 						ok(true,
 							'.fail() was called');
@@ -116,7 +116,7 @@
 				expect(2);
 				
 				(new Juggle)
-					.do(function (complete) {
+					.j(function (complete) {
 						var t = setTimeout(function () {
 							complete(true);
 						}, 20);
@@ -141,7 +141,7 @@
 				expect(3);
 
 				(new Juggle)
-					.do(function (complete) {
+					.j(function (complete) {
 						var t = setTimeout(function () {
 							complete(true);
 						}, 20);
@@ -151,7 +151,7 @@
 							stopped();
 						};
 					})
-					.do(function (complete) {
+					.j(function (complete) {
 						var _this = this;
 						setTimeout(function () {
 							complete('We cancelled')
@@ -174,7 +174,7 @@
 				expect(3);
 
 				(new Juggle)
-					.do(function (complete) {
+					.j(function (complete) {
 						var t = setTimeout(function () {
 							complete(true);
 						}, 50);
@@ -186,7 +186,7 @@
 							}, 30);
 						};
 					})
-					.do(function (complete) {
+					.j(function (complete) {
 						var _this = this;
 						setTimeout(function () {
 							complete('We cancelled');
@@ -209,7 +209,7 @@
 				expect(1);
 
 				(new Juggle)
-					.do(function (complete) {
+					.j(function (complete) {
 						setTimeout(function () {
 							complete(true);
 						}, 50);
@@ -217,7 +217,7 @@
 					.complete(function () {
 						try
 						{
-							this.do(function (complete) {
+							this.j(function (complete) {
 								complete(true);
 							});
 						} catch (e) {
