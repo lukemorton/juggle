@@ -17,13 +17,13 @@ npm install juggle
 
 ``` javascript
 (new Juggle)
-  .do(function (complete) {
+  .j(function (complete) {
     $.post('/api', function (response) {
       // Call complete when you want to hand a result back
       complete(response);
     });
   })
-  .do(function (complete) {
+  .j(function (complete) {
     $.post('/api/v2', function (response) {
       complete(response);
     });
@@ -38,12 +38,12 @@ npm install juggle
 
 ``` javascript
 (new Juggle)
-  .do(function (complete) { complete(true); })
+  .j(function (complete) { complete(true); })
   .success(function (responses) { console.log(responses); });
 
 (new Juggle)
-  .do(function (complete) { complete(true); })
-  .do(function (complete) { complete(false); })
+  .j(function (complete) { complete(true); })
+  .j(function (complete) { complete(false); })
   .fail(function (err, responses) { throw err; });
 ```
 
@@ -51,7 +51,7 @@ npm install juggle
 
 ``` javascript
 (new Juggle)
-  .do(function (complete) {
+  .j(function (complete) {
     var jqXHR = $.ajax({
       url: '/api',
       success: complete,
@@ -63,10 +63,10 @@ npm install juggle
       jqXHR.abort();
     };
   })
-  .do(function () {
+  .j(function () {
     // Since this represents the Juggle instance we can call
     // methods like .cancel() from in here.
-    // .cancel() will call all returned functions from .do()
+    // .cancel() will call all returned functions from .j()
     // callbacks
     this.cancel();
   })
@@ -79,7 +79,7 @@ npm install juggle
 
 ``` javascript
 (new Juggle)
-  .do(function (complete) {
+  .j(function (complete) {
     setTimeout(function () {
       complete('This will never get recorded');
     }, 30*1000);
@@ -95,7 +95,7 @@ but utilising a cancel function.
 
 ``` javascript
 (new Juggle)
-  .do(function (complete) {
+  .j(function (complete) {
     var t = setTimeout(function () {
       complete('This will never get recorded');
     }, 30*1000);
@@ -129,8 +129,8 @@ function asyncJS(src, callback) {
 }
 
 (new Juggle)
-  .do(asyncJS('https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'))
-  .do(asyncJS('https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js'))
+  .j(asyncJS('https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'))
+  .j(asyncJS('https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js'))
   .success(function () {
     // Do something with jQuery and UI
     $('body').append('<h1>Loaded</h1>');
