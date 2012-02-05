@@ -301,6 +301,12 @@
 						'But not two');
 				}
 			});
+
+			test('.juggle() also works', function () {
+				var juggle = new Juggle;
+				ok(juggle.j === juggle.juggle,
+					'They are the same');
+			});
 		</script>
 	</body>
 </html>
